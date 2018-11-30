@@ -12,7 +12,7 @@ cd into this address,
 import os
 import cv2
 import numpy as np
-from sklearn import preprocessing
+# from sklearn import preprocessing
 
 def stack_images(path):
     os.chdir(path)
