@@ -11,10 +11,26 @@ def from_folder(datadir_in):
 
 
 def walk(datadir):
+    '''Function to record all files in the directory
+
+    Args:
+        datadir: Input directory that contains all the fil
+
+    Returns:
+
+    '''
+    listx = []
+    listy = []
     for root, dirs, files in os.walk(datadir):
         for file in files:
             if file.endswith(".jpg"):
-                print(os.path.join(root, file))
+                with open(os.path.join(root, file), 'rb') as fd:
+                    im = Image.open(fd)
+                    listx.append(im.size[0])
+                    listy.append(im.size[1])
+
+                # return {filename_in: [im.size[0], im.size[1]]}
+    return listx, listy
 
 
 def get_img_size(datadir_in):
@@ -33,7 +49,7 @@ def get_img_size(datadir_in):
 
 if __name__ == "__main__":
 
-    directory = '/home/geoffrey893/PycharmProjects/scene-recognition-models/testing'
+    directory = '/home/geoffrey893/PycharmProjects/scene-recognition-models/training'
 
     images_list = from_folder(directory)
     # img_sizes = []
@@ -42,7 +58,7 @@ if __name__ == "__main__":
     # for images in images_list:
     #     print(images)
     #     my_dict.update(get_img_size(directory, images))
-    listx, listy = get_img_size(directory)
+    listx, listy = walk(directory)
 
     print(max(listx))
     print(min(listx))
