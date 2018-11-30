@@ -40,7 +40,7 @@ if __name__ == "__main__":
     # my_dict = {}
 
     # for images in images_list:
-    #     #print(images)
+    #     print(images)
     #     my_dict.update(get_img_size(directory, images))
     listx, listy = get_img_size(directory)
 
