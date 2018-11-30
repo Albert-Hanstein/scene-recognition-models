@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 from sklearn import preprocessing
+from tiny_image import stack_images
 
 img = cv2.imread('../training/bedroom/1.jpg', cv2.IMREAD_GRAYSCALE)
 resized_img = cv2.resize(img, (16, 16))
@@ -13,17 +14,12 @@ normalised = preprocessing.normalize(flattened2, norm='l1')
 
 folder = [x[0] for x in os.walk('../training/')]
 folder = folder[1:]
-#print(folder)
 for path in folder:
-    print(path)
-    os.chdir(path)
-    """
-    Save images here
-    """
-    os.chdir('../')
-    """
-    test_image = cv2.imread('0.jpg', cv2.IMREAD_GRAYSCALE)
-    cv2.imshow('img', test_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    """
+    print(stack_images(path).shape)
+
+'''
+test_image = cv2.imread('0.jpg', cv2.IMREAD_GRAYSCALE)
+cv2.imshow('img', test_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+'''
