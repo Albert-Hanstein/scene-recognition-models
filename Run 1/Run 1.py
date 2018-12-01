@@ -16,17 +16,16 @@ normalised = preprocessing.normalize(flattened2, norm='l1')
 
 folder = [x[0] for x in os.walk('../training/')]
 folder = folder[1:]
+whole_dataset = np.zeros(257)
 for path in folder:
     categ_column = np.tile(folder.index(path), (100, 1)) # 100 because that's the number of images in each category
     flat_imgs = stack_images(path)
     norm_flat_imgs = preprocessing.normalize(flat_imgs, norm='l1')
     categ_dataset = np.hstack([norm_flat_imgs, categ_column])
-    
-
-# Create vertical np.array with index indicating category
-# hstack that to the stack of images
-# This will be the data fo rone category
-# Do a bigger vstack to stack the categories
+    whole_dataset = np.vstack([whole_dataset, categ_dataset])
+whole_dataset = whole_dataset[1:, :]
+print("Final dataset shape: " + str(whole_dataset.shape))
+print(whole_dataset[-1,:])
 
 '''
 test_image = cv2.imread('0.jpg', cv2.IMREAD_GRAYSCALE)
