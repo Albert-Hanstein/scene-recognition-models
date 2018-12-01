@@ -1,8 +1,9 @@
 import os
-# import cv2
 import numpy as np
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, confusion_matrix
 from tiny_image import stack_images
 
 # Preparing numpy matrix dataset
@@ -23,6 +24,16 @@ features = whole_dataset[:,:-1]
 labels = whole_dataset[:, -1]
 features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.20)
 
+# Train the model
+classifier = KNeighborsClassifier(n_neighbors=5) # K = 5
+classifier.fit(features_train, labels_train)
+
+# Predict
+labels_pred = classifier.predict(features_test)
+
+# Evaluate
+print(confusion_matrix(labels_test, labels_pred))
+print(classification_report(labels_test, labels_pred))
 
 '''
 test_image = cv2.imread('0.jpg', cv2.IMREAD_GRAYSCALE)
