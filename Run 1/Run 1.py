@@ -1,7 +1,7 @@
 import os
 # import cv2
 import numpy as np
-# from sklearn import preprocessing
+from sklearn import preprocessing
 from tiny_image import stack_images
 
 '''
@@ -17,8 +17,11 @@ normalised = preprocessing.normalize(flattened2, norm='l1')
 folder = [x[0] for x in os.walk('../training/')]
 folder = folder[1:]
 for path in folder:
-    print(folder.index(path))
-    print(stack_images(path).shape)
+    categ_column = np.tile(folder.index(path), (100, 1)) # 100 because that's the number of images in each category
+    flat_imgs = stack_images(path)
+    norm_flat_imgs = preprocessing.normalize(flat_imgs, norm='l1')
+    categ_dataset = np.hstack([norm_flat_imgs, categ_column])
+    
 
 # Create vertical np.array with index indicating category
 # hstack that to the stack of images
