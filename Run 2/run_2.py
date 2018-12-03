@@ -2,8 +2,8 @@ import cv2
 from sampling import sample
 
 path = '../training/bedroom/'
-sample(path)
+sample_stack = sample(path)
 
 
 # TODO: Research sampling with OpenCV
-# There should be a way 
+# There should be a way
