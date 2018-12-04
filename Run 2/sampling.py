@@ -3,11 +3,14 @@ import cv2
 import numpy as np
 from sklearn import preprocessing
 
-def sample(path):
-    os.chdir(path)
+def sample(image):
+    # os.chdir(image)
+    # os.chdir('../training/bedroom/')
     sample_size = 8
-    test_image = cv2.imread('0.jpg', cv2.IMREAD_GRAYSCALE)
+    print('Image: ' + str(image))
+    test_image = cv2.imread(str(image) + '.jpg', cv2.IMREAD_GRAYSCALE)
     height, width = test_image.shape
+    print('Height: ' + str(height) + ' Width: ' + str(width))
     x_start_sample = 0
     y_start_sample = 0
     num_of_samples = 0
@@ -36,5 +39,5 @@ def sample(path):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     '''
-    os.chdir('../')
+    # os.chdir('../')
     return sample_stack;

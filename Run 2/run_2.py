@@ -1,11 +1,12 @@
 import os
 import cv2
 import numpy as np
+from joblib import dump, load
 from sampling import sample
 from quantisation import stack_training_dataset
 
-path = '../training/bedroom/'
-sample_stack = sample(path)
+# path = '../training/bedroom/'
+# sample_stack = sample(0)
 
 '''
 TODO: Sample_stack 80% of all images in training dataset
@@ -14,4 +15,4 @@ TODO: Sample_stack 80% of all images in training dataset
 '''
 
 path = '../training/'
-stack_training_dataset(path) # expecting 15
+dump(stack_training_dataset(path), 'stacked_training_set_before_kmc.joblib') # expecting 15

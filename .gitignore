@@ -1,3 +1,4 @@
 Run 1/plan.txt
 training/
 testing/
+!training/stacked_training_set_before_kmc.joblib
