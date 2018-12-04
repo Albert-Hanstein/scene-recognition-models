@@ -36,4 +36,5 @@ def sample(path):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     '''
+    os.chdir('../')
     return sample_stack;
