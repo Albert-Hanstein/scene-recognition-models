@@ -5,7 +5,7 @@ from sklearn import preprocessing
 
 def sample(image):
     sample_size = 8
-    print('Image: ' + str(image))
+    # print('Image: ' + str(image))
     test_image = cv2.imread(str(image) + '.jpg', cv2.IMREAD_GRAYSCALE)
     height, width = test_image.shape
     print('Height: ' + str(height) + ' Width: ' + str(width))

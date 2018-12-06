@@ -26,6 +26,6 @@ def stack_training_dataset(path):
 def k_means(data_points):
     print(data_points.shape)
     kmeans = KMeans(n_clusters=500, random_state=0, n_jobs=1).fit(data_points)
-    #dump(kmeans, 'kmeans_model.joblib')
+    dump(kmeans, 'kmeans_model.joblib')
     print('Clustering done')
     return kmeans;
