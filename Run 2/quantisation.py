@@ -29,3 +29,23 @@ def k_means(data_points):
     dump(kmeans, 'kmeans_model.joblib')
     print('Clustering done')
     return kmeans;
+
+def one_d_histogram(path, clustering_model):
+    num_of_images = 10 # Set this back to 80 when making dataset
+    folder = [x[0] for x in os.walk(path)]
+    folder = folder[1:]
+    histogram_stack = np.ones(500,)
+    for category in folder:
+        os.chdir(category)
+        for img in range(num_of_images):
+            samples = sample(img)
+            prediction = clustering_model.predict(samples)
+            freq = np.bincount(prediction)
+            while(len(freq) < 500):
+                freq = np.append(freq, 0)
+            print('Freq shape: ' + str(freq.shape))
+            histogram_stack = np.vstack([histogram_stack, freq])
+            print('Histogram stack shape: ' + str(histogram_stack.shape))
+        os.chdir('../')
+    histogram_stack = histogram_stack[1:,:]
+    return histogram_stack;
