@@ -1,5 +1,7 @@
 import os
 import numpy as np
+from joblib import dump, load
+from sklearn.cluster import KMeans
 from sampling import sample
 
 def stack_training_dataset(path):
@@ -20,3 +22,10 @@ def stack_training_dataset(path):
     print('Shape of stack after piling up training set samples:')
     print(stack.shape)
     return stack;
+
+def k_means(data_points):
+    print(data_points.shape)
+    kmeans = KMeans(n_clusters=500, random_state=0, n_jobs=1).fit(data_points)
+    #dump(kmeans, 'kmeans_model.joblib')
+    print('Clustering done')
+    return kmeans;

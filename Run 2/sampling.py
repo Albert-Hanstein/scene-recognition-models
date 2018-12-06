@@ -4,8 +4,6 @@ import numpy as np
 from sklearn import preprocessing
 
 def sample(image):
-    # os.chdir(image)
-    # os.chdir('../training/bedroom/')
     sample_size = 8
     print('Image: ' + str(image))
     test_image = cv2.imread(str(image) + '.jpg', cv2.IMREAD_GRAYSCALE)
@@ -30,14 +28,13 @@ def sample(image):
     sample_stack = sample_stack[1:,:]
     sample_stack = preprocessing.normalize(sample_stack, norm='l1') # mean=0 && sum==1
     print("Number of samples: " + str(num_of_samples)) # 3185
-    print(sample_stack.shape) # expecting (3185, 64)
+    print(sample_stack.shape) # expecting (XX, 64)
+
+    # For debugging/experimenting purposes, use the code below to view image sections
     '''
     crop_img = test_image[0:100, 0:100]
     cv2.imshow('crop1', crop_img)
-    cv2.imshow('orig', test_image)
-    cv2.imshow('crop2', test_image[y_start_sample:y_start_sample+7, x_start_sample:x_start_sample+7])
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     '''
-    # os.chdir('../')
     return sample_stack;
