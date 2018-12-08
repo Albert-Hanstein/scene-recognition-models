@@ -4,7 +4,7 @@ import numpy as np
 #from sklearn.cluster import KMeans
 from joblib import dump, load
 from sampling import sample
-from quantisation import stack_training_dataset, k_means, one_d_histogram
+from quantisation import *
 
 def main():
     # To sample the training images and stack up the samples
@@ -18,7 +18,7 @@ def main():
     # kmeans = k_means(stack_for_kmeans[:10000,:])
 
     # Just load a saved model to go faster
-    kmeans = load('kmeans_model.joblib')
+    # kmeans = load('kmeans_model.joblib')
     '''
     # Test out the kmeans model
     image_path = '../training/Office/50'
@@ -33,8 +33,12 @@ def main():
     print(len(freq))
     print(freq)
     '''
-    histogram_stack = one_d_histogram('../training/', kmeans)
+    # histogram_stack = one_d_histogram('../training/', kmeans)
+    histogram_stack = load('../training/histogram_stack_no_labels.joblib')
+    print(histogram_stack.shape)
 
+    label_col = labels()
+    
     return;
 
 if __name__ == "__main__":

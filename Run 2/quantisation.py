@@ -48,4 +48,13 @@ def one_d_histogram(path, clustering_model):
             print('Histogram stack shape: ' + str(histogram_stack.shape))
         os.chdir('../')
     histogram_stack = histogram_stack[1:,:]
+    dump(histogram_stack, 'histogram_stack.joblib')
     return histogram_stack;
+
+def labels():
+    samples_per_categ = 80
+    num_of_categs = 15
+    label_col = np.zeros(samples_per_categ)
+    for categ in range(num_of_categs-1):
+        label_col = np.hstack([label_col, np.full(samples_per_categ, categ+1)])
+    return label_col;
