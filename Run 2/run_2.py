@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 #from sklearn.cluster import KMeans
 from joblib import dump, load
+from sklearn.linear_model import LogisticRegression
 from sampling import sample
 from quantisation import *
 
@@ -35,10 +36,12 @@ def main():
     '''
     # histogram_stack = one_d_histogram('../training/', kmeans)
     histogram_stack = load('../training/histogram_stack_no_labels.joblib')
-    print(histogram_stack.shape)
-
     label_col = labels()
-    
+
+    # One-vs-Rest Logistic Regression
+    clf = LogisticRegression(penalty='l1',tol=1e-3,random_state=0, max_iter=100, solver='liblinear', multi_class='ovr').fit(histogram_stack, label_col)
+    print(clf.predict(histogram_stack[75:85,:]))
+    print(clf.score(histogram_stack, label_col))
     return;
 
 if __name__ == "__main__":
