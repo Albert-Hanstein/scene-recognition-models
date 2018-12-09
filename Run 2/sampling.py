@@ -1,7 +1,7 @@
 import os
-import cv2
+
 import numpy as np
-from sklearn import preprocessing
+
 
 def sample(image):
     sample_size = 8
