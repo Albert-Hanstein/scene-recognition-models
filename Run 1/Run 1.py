@@ -4,6 +4,7 @@ from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix
+import matplotlib.pyplot as plt
 from tiny_image import stack_images
 
 # Preparing numpy matrix dataset
@@ -24,16 +25,28 @@ features = whole_dataset[:,:-1]
 labels = whole_dataset[:, -1]
 features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.20)
 
-# Train the model
-classifier = KNeighborsClassifier(n_neighbors=5) # K = 5
-classifier.fit(features_train, labels_train)
+scores = []
+for i in range(15):
+    # Train the model
+    classifier = KNeighborsClassifier(n_neighbors=(i+1)) # K = 5
+    classifier.fit(features_train, labels_train)
 
-# Predict
-labels_pred = classifier.predict(features_test)
+    # Predict
+    labels_pred = classifier.predict(features_test)
 
-# Evaluate
-print(confusion_matrix(labels_test, labels_pred))
-print(classification_report(labels_test, labels_pred))
+    # Evaluate
+    accuracy = sum(labels_test == labels_pred)/len(labels_test)
+    print('Accuracy: ' + str(accuracy))
+    # print(confusion_matrix(labels_test, labels_pred))
+    # print(classification_report(labels_test, labels_pred))
+    scores.append(accuracy)
+
+k_values_tried = list(range(1, 16))
+plt.plot(k_values_tried, scores, 'ro')
+plt.xlabel('Values of K tried')
+plt.ylabel('Accuracy')
+plt.title('Accuracy for different values of K')
+plt.show()
 
 '''
 test_image = cv2.imread('0.jpg', cv2.IMREAD_GRAYSCALE)

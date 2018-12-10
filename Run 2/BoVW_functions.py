@@ -4,6 +4,7 @@ import numpy as np
 from joblib import dump, load
 from sklearn import preprocessing
 from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
 from sampling import sample
 
 def sample(image):
@@ -126,3 +127,29 @@ def display_matrix(confusion_matrix):
       plt.annotate(str(confusion_matrix[x][y]), xy=(y, x), horizontalalignment='center', verticalalignment='center')
     plt.show()
     return;
+
+def inference_histogram(image, clustering_model):
+    samples = sample(image)
+    prediction = clustering_model.predict(samples)
+    freq = np.bincount(prediction)
+    while(len(freq) < 500):
+        freq = np.append(freq, 0)
+    return freq;
+
+def convert(num):
+    if num == 0: return 'tallbuilding'
+    elif num == 1: return 'suburb'
+    elif num == 2: return 'insidecity'
+    elif num == 3: return 'highway'
+    elif num == 4: return 'bedroom'
+    elif num == 5: return 'opencountry'
+    elif num == 6: return 'livingroom'
+    elif num == 7: return 'store'
+    elif num == 8: return 'industrial'
+    elif num == 9: return 'kitchen'
+    elif num == 10: return 'office'
+    elif num == 11: return 'coast'
+    elif num == 12: return 'street'
+    elif num == 13: return 'mountain'
+    elif num == 14: return 'forest'
+    else: return 'This is not a category.';

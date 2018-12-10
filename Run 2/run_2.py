@@ -5,6 +5,7 @@ from joblib import dump, load
 from sklearn import preprocessing
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
+from pathlib import Path
 from BoVW_functions import *
 
 def main():
@@ -46,6 +47,26 @@ def main():
     # Confusion matrix for in-depth analysis of model behaviour
     cm = metrics.confusion_matrix(label_col_test, predict_on_test)
     display_matrix(cm)
+
+    # Predict for Jon's testing folder
+    path = '../testing'
+    os.chdir(path)
+    num_of_inference_img = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
+    text_list = []
+    for img in range(2963, num_of_inference_img):
+        file = Path(str(img)+'.jpg')
+        if file.is_file():
+            print('Image: ' + str(img))
+            img_histogram = inference_histogram(img, kmeans)
+            inference = clf.predict(img_histogram.reshape(1, -1))
+            pred_text = str(img) + '.jpg ' + convert(inference) + '\n'
+            text_list.append(pred_text)
+    dump(text_list, 'text_list.joblib')
+
+text_file = open('../Run 2/run2.txt', 'w')
+for i in range(len(text_list)):
+    text_file.write(text_list[i])
+text_file.close()
 
     return;
 
