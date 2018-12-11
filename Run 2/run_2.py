@@ -46,7 +46,6 @@ def main():
 
     # Confusion matrix for in-depth analysis of model behaviour
     cm = metrics.confusion_matrix(label_col_test, predict_on_test)
-    display_matrix(cm)
 
     # Predict for Jon's testing folder
     path = '../testing'
@@ -66,6 +65,8 @@ def main():
     for i in range(len(text_list)):
         text_file.write(text_list[i])
     text_file.close()
+
+    display_matrix(cm) # display this last because you have to close the window to continue
 
     return;
 
