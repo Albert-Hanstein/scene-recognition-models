@@ -53,7 +53,7 @@ def main():
     os.chdir(path)
     num_of_inference_img = len([f for f in os.listdir(path)if os.path.isfile(os.path.join(path, f))])
     text_list = []
-    for img in range(2963, num_of_inference_img):
+    for img in range(num_of_inference_img+3): # To account for the 3 missing files
         file = Path(str(img)+'.jpg')
         if file.is_file():
             print('Image: ' + str(img))
@@ -61,12 +61,11 @@ def main():
             inference = clf.predict(img_histogram.reshape(1, -1))
             pred_text = str(img) + '.jpg ' + convert(inference) + '\n'
             text_list.append(pred_text)
-    dump(text_list, 'text_list.joblib')
-
-text_file = open('../Run 2/run2.txt', 'w')
-for i in range(len(text_list)):
-    text_file.write(text_list[i])
-text_file.close()
+    dump(text_list, 'text_list.joblib') # backup
+    text_file = open('../Run 2/run2.txt', 'w')
+    for i in range(len(text_list)):
+        text_file.write(text_list[i])
+    text_file.close()
 
     return;
 
