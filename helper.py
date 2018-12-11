@@ -47,6 +47,32 @@ def get_img_size(datadir_in):
     return listx, listy
 
 
+def get_cm_string(cm, labels, hide_zeroes=False, hide_diagonal=False, hide_threshold=None):
+    """pretty print for confusion matrixes"""
+    columnwidth = max([len(x) for x in labels] + [9])  # 5 is value length
+    empty_cell = ' ' * columnwidth
+    # Print header
+    cm_string = '    ' + empty_cell + ' '
+    for label in labels:
+        cm_string += '%{0}s'.format(columnwidth) % label + ' '
+    cm_string += '\n'
+    # Print rows
+    for i, label1 in enumerate(labels):
+        cm_string += '    %{0}s'.format(columnwidth) % label1 + ' '
+        for j in range(len(labels)):
+            cell = "%{0}.0f".format(columnwidth) % cm[i, j]
+            if hide_zeroes:
+                cell = cell if float(cm[i, j]) != 0 else empty_cell
+            if hide_diagonal:
+                cell = cell if i != j else empty_cell
+            if hide_threshold:
+                cell = cell if cm[i, j] > hide_threshold else empty_cell
+            cm_string += cell + ' '
+        cm_string += '\n'
+
+    return cm_string
+
+
 if __name__ == "__main__":
 
     directory = '/home/geoffrey893/PycharmProjects/scene-recognition-models/training'
