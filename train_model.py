@@ -80,27 +80,27 @@ validation_data = train_datagen.flow_from_directory(
 
 classifier = Sequential()
 
-classifier.add(Conv2D(48, kernel_size=(11, 11), strides=(4, 4), input_shape=(image_dim[0], image_dim[1], 1), use_bias=False))
+classifier.add(Conv2D(24, kernel_size=(11, 11), strides=(4, 4), input_shape=(image_dim[0], image_dim[1], 1), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
 classifier.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
 
-classifier.add(Conv2D(128, kernel_size=(5, 5), use_bias=False))
+classifier.add(Conv2D(64, kernel_size=(5, 5), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
 classifier.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
 
-classifier.add(Conv2D(192, kernel_size=(3, 3), use_bias=False))
+classifier.add(Conv2D(96, kernel_size=(3, 3), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
-classifier.add(Conv2D(192, kernel_size=(3, 3), use_bias=False))
+classifier.add(Conv2D(96, kernel_size=(3, 3), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
-classifier.add(Conv2D(128, kernel_size=(3, 3), use_bias=False))
+classifier.add(Conv2D(64, kernel_size=(3, 3), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
@@ -108,12 +108,12 @@ classifier.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
 
 classifier.add(Flatten())
 
-classifier.add(Dense(units=2048, use_bias=False))
+classifier.add(Dense(units=1024, use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 classifier.add(Dropout(0.25))
 
-classifier.add(Dense(units=1024, use_bias=False))
+classifier.add(Dense(units=512, use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
