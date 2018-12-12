@@ -1,4 +1,6 @@
 import os
+import matplotlib as plt
+import numpy as np
 from PIL import Image
 
 
@@ -71,6 +73,19 @@ def get_cm_string(cm, labels, hide_zeroes=False, hide_diagonal=False, hide_thres
         cm_string += '\n'
 
     return cm_string
+
+def display_matrix(confusion_matrix):
+    plt.figure(figsize=(9,9))
+    plt.imshow(confusion_matrix, interpolation='nearest', cmap='Pastel1')
+    plt.title('Confusion matrix', size = 15)
+    plt.colorbar()
+    tick_marks = np.arange(15)
+    plt.xticks(tick_marks, ["Tall Building", "Suburb", "Inside City", "Highway", "Bedroom", "Open Country", "Living Room", "Store", "Industrial", "Kitchen", "Office", "Coast", "Street", "Mountain", "Forest"], rotation=90, size = 10)
+    plt.yticks(tick_marks, ["Tall Building", "Suburb", "Inside City", "Highway", "Bedroom", "Open Country", "Living Room", "Store", "Industrial", "Kitchen", "Office", "Coast", "Street", "Mountain", "Forest"], size = 10)
+    plt.tight_layout()
+    plt.ylabel('Actual label', size = 15)
+    plt.xlabel('Predicted label', size = 15)
+    width, height = confusion_matrix.shape
 
 
 if __name__ == "__main__":

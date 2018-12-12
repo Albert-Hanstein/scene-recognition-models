@@ -1,20 +1,32 @@
+# import os
+# os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 
 import keras
 from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Flatten
+from keras.layers import Conv2D, MaxPooling2D, Flatten, BatchNormalization, Activation
 from keras.layers import Dense, Dropout
 from keras.preprocessing.image import ImageDataGenerator
 from livelossplot import PlotLossesKeras
 import numpy as np
+import cv2
+import matplotlib as plt
 from sklearn.metrics import confusion_matrix
+import helper as hlp
 # from IPython.display import display
 # from PIL import Image
-# import helper as hlp
 from helper import get_cm_string
 
-image_dim = (64, 64)
+# Keras VGG
+# from keras.applications import vgg16
+# classifier = vgg16.VGG16(weights='imagenet')
 
-train_dir = '/home/geoffrey893/PycharmProjects/scene-recognition-models/training'
+
+# Disable gpu - put this at the very top before keras import
+
+
+image_dim = (224, 224)
+
+train_dir = 'C:/Users/geoff/PycharmProjects/scene-recognition-models/training'
 
 keras.optimizers.Adam(lr=0.0025, beta_1=0.9, beta_2=0.99, epsilon=None, decay=0.0, amsgrad=False)
 
@@ -33,72 +45,106 @@ train_datagen = ImageDataGenerator(rescale=1./255,
                                    )
 test_datagen = ImageDataGenerator(rescale=1./255)
 
-training_gen = train_datagen.flow_from_directory(
+img = cv2.imread('1.jpg', cv2.IMREAD_GRAYSCALE)
+im = np.reshape(cv2.resize(img, (224, 224)), (224, 224, 1, 1))
+
+training_data_for_fitting = train_datagen.flow_from_directory(
     train_dir,
     target_size=image_dim,
-    batch_size=10,
+    batch_size=1000,
     color_mode='grayscale',
     class_mode='sparse',
     subset='training'
 )
 
-validation_gen = train_datagen.flow_from_directory(
+training_data = train_datagen.flow_from_directory(
     train_dir,
     target_size=image_dim,
-    batch_size=10,
+    batch_size=64,
+    color_mode='grayscale',
+    class_mode='sparse',
+    subset='training'
+)
+train_datagen.fit(training_data_for_fitting[0][0])
+
+validation_data = train_datagen.flow_from_directory(
+    train_dir,
+    target_size=image_dim,
+    batch_size=64,
     color_mode='grayscale',
     class_mode='sparse',
     subset='validation'
 )
 
-# test_set = test_datagen.flow_from_directory(
-#     test_dir,
-#     target_size=(200, 200),
-#     batch_size=10,
-#     color_mode='grayscale',
-#     class_mode='sparse'
-# )
+#classifier architecture
 
 classifier = Sequential()
 
-classifier.add(Conv2D(32, kernel_size=(5, 5), input_shape=(image_dim[0], image_dim[1], 1), activation='relu'))
+classifier.add(Conv2D(48, kernel_size=(11, 11), strides=(4, 4), input_shape=(image_dim[0], image_dim[1], 1), use_bias=False))
+classifier.add(BatchNormalization())
+classifier.add(Activation("relu"))
 
-classifier.add(MaxPooling2D(pool_size=(2, 2)))
+classifier.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
 
-classifier.add(Conv2D(64, kernel_size=(5, 5), activation='relu'))
+classifier.add(Conv2D(128, kernel_size=(5, 5), use_bias=False))
+classifier.add(BatchNormalization())
+classifier.add(Activation("relu"))
 
-classifier.add(MaxPooling2D(pool_size=(2, 2)))
+classifier.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
+
+classifier.add(Conv2D(192, kernel_size=(3, 3), use_bias=False))
+classifier.add(BatchNormalization())
+classifier.add(Activation("relu"))
+
+classifier.add(Conv2D(192, kernel_size=(3, 3), use_bias=False))
+classifier.add(BatchNormalization())
+classifier.add(Activation("relu"))
+
+classifier.add(Conv2D(128, kernel_size=(3, 3), use_bias=False))
+classifier.add(BatchNormalization())
+classifier.add(Activation("relu"))
+
+classifier.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
 
 classifier.add(Flatten())
 
-classifier.add(Dense(output_dim=64, activation='relu'))
+classifier.add(Dense(units=2048, use_bias=False))
+classifier.add(BatchNormalization())
+classifier.add(Activation("relu"))
+classifier.add(Dropout(0.25))
 
-classifier.add(Dropout(0.5))
+classifier.add(Dense(units=1024, use_bias=False))
+classifier.add(BatchNormalization())
+classifier.add(Activation("relu"))
 
-classifier.add(Dense(output_dim=32, activation='relu'))
+classifier.add(Dropout(0.25))
 
-classifier.add(Dropout(0.5))
+classifier.add(Dense(units=15, use_bias=False))
+classifier.add(BatchNormalization())
+classifier.add(Activation("softmax"))
 
-classifier.add(Dense(output_dim=15, activation='softmax'))
 
 classifier.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
+
+#training sequence
 classifier.fit_generator(
-    training_gen,
-    steps_per_epoch=training_gen.samples/training_gen.batch_size,
-    epochs=300,
-    validation_data=validation_gen,
-    validation_steps=validation_gen.samples/validation_gen.batch_size,
+    training_data,
+    steps_per_epoch=training_data.samples / training_data.batch_size,
+    epochs=200,
+    validation_data=validation_data,
+    validation_steps=validation_data.samples / validation_data.batch_size,
     callbacks=[PlotLossesKeras()]
     )
 
 
-validation_gen.reset()
-predictions = classifier.predict_generator(validation_gen, verbose=1, steps=validation_gen.samples/validation_gen.batch_size)
+validation_data.reset()
+predictions = classifier.predict_generator(validation_data, verbose=1, steps=validation_data.samples / validation_data.batch_size)
 
 predicted_class_indices = np.argmax(predictions, axis=1)
-ground_truth_class_indices = validation_gen.classes
+ground_truth_class_indices = validation_data.classes
 
 cm = confusion_matrix(ground_truth_class_indices, predicted_class_indices)
-cm_string = get_cm_string(cm, labels=validation_gen.class_indices.keys())
+#hlp.display_matrix(cm)
+cm_string = get_cm_string(cm, labels=validation_data.class_indices.keys())
 print(cm_string)
