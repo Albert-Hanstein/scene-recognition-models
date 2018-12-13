@@ -96,13 +96,11 @@ classifier.add(Conv2D(64, kernel_size=(3, 3), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
-classifier.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2)))
-
-classifier.add(Conv2D(32, kernel_size=(3, 3), use_bias=False))
+classifier.add(Conv2D(64, kernel_size=(3, 3), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
-classifier.add(Conv2D(32, kernel_size=(3, 3), use_bias=False))
+classifier.add(Conv2D(64, kernel_size=(3, 3), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
@@ -119,11 +117,11 @@ classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 classifier.add(Dropout(0.5))
 
-classifier.add(Dense(units=512, use_bias=False))
-classifier.add(BatchNormalization())
-classifier.add(Activation("relu"))
+# classifier.add(Dense(units=512, use_bias=False))
+# classifier.add(BatchNormalization())
+# classifier.add(Activation("relu"))
 
-classifier.add(Dropout(0.5))
+#classifier.add(Dropout(0.5))
 
 classifier.add(Dense(units=15, use_bias=False))
 classifier.add(BatchNormalization())
