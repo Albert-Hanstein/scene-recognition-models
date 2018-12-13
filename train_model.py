@@ -60,7 +60,7 @@ training_data_for_fitting = train_datagen.flow_from_directory(
 training_data = train_datagen.flow_from_directory(
     train_dir,
     target_size=image_dim,
-    batch_size=64,
+    batch_size=135,
     color_mode='grayscale',
     class_mode='sparse',
     subset='training'
@@ -70,7 +70,7 @@ train_datagen.fit(training_data_for_fitting[0][0])
 validation_data = train_datagen.flow_from_directory(
     train_dir,
     target_size=image_dim,
-    batch_size=64,
+    batch_size=150,
     color_mode='grayscale',
     class_mode='sparse',
     subset='validation'
@@ -111,13 +111,13 @@ classifier.add(Flatten())
 classifier.add(Dense(units=1024, use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
-classifier.add(Dropout(0.25))
+classifier.add(Dropout(0.5))
 
 classifier.add(Dense(units=512, use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
-classifier.add(Dropout(0.25))
+classifier.add(Dropout(0.5))
 
 classifier.add(Dense(units=15, use_bias=False))
 classifier.add(BatchNormalization())
@@ -131,7 +131,7 @@ classifier.compile(optimizer='adam', loss='sparse_categorical_crossentropy', met
 classifier.fit_generator(
     training_data,
     steps_per_epoch=training_data.samples / training_data.batch_size,
-    epochs=200,
+    epochs=250,
     validation_data=validation_data,
     validation_steps=validation_data.samples / validation_data.batch_size,
     callbacks=[PlotLossesKeras()]
