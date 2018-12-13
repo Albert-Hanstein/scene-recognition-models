@@ -28,7 +28,7 @@ image_dim = (224, 224)
 
 train_dir = 'C:/Users/geoff/PycharmProjects/scene-recognition-models/training'
 
-keras.optimizers.Adam(lr=0.0025, beta_1=0.9, beta_2=0.99, epsilon=None, decay=0.0, amsgrad=False)
+keras.optimizers.Adam(lr=0.005, beta_1=0.9, beta_2=0.99, epsilon=None, decay=0.0, amsgrad=False)
 
 
 train_datagen = ImageDataGenerator(rescale=1./255,
@@ -51,7 +51,7 @@ im = np.reshape(cv2.resize(img, (224, 224)), (224, 224, 1, 1))
 training_data_for_fitting = train_datagen.flow_from_directory(
     train_dir,
     target_size=image_dim,
-    batch_size=1000,
+    batch_size=1350,
     color_mode='grayscale',
     class_mode='sparse',
     subset='training'
