@@ -80,7 +80,7 @@ validation_data = train_datagen.flow_from_directory(
 
 classifier = Sequential()
 
-classifier.add(Conv2D(24, kernel_size=(11, 11), strides=(4, 4), input_shape=(image_dim[0], image_dim[1], 1), use_bias=False))
+classifier.add(Conv2D(48, kernel_size=(11, 11), strides=(4, 4), input_shape=(image_dim[0], image_dim[1], 1), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
@@ -96,11 +96,7 @@ classifier.add(Conv2D(64, kernel_size=(3, 3), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
-classifier.add(Conv2D(64, kernel_size=(3, 3), use_bias=False))
-classifier.add(BatchNormalization())
-classifier.add(Activation("relu"))
-
-classifier.add(Conv2D(64, kernel_size=(3, 3), use_bias=False))
+classifier.add(Conv2D(32, kernel_size=(3, 3), use_bias=False))
 classifier.add(BatchNormalization())
 classifier.add(Activation("relu"))
 
